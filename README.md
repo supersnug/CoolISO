@@ -40,3 +40,7 @@ sudo ./buildiso.sh -p desktop -v -w
 ```
 
 As the result iso appears at the `out` folder
+
+The build downloads the rolling `development` package from
+[`supersnug/CoolOS-Installer`](https://github.com/supersnug/CoolOS-Installer).
+Set `COOLOS_INSTALLER_PACKAGE_URL` to build against a different package URL.
