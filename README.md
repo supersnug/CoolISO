@@ -1,4 +1,4 @@
-These are the basic needed files and folders to build CachyOS system.
+These are the files and folders used to build the CoolISO CachyOS development environment.
 
 ### buildiso
 
@@ -30,8 +30,8 @@ sudo pacman -S archiso mkinitcpio-archiso git squashfs-tools grub --needed
 
 ### Clone:
 ```bash
-git clone https://github.com/cachyos/cachyos-live-iso.git cachyos-archiso
-cd cachyos-archiso
+git clone https://github.com/supersnug/CoolISO.git
+cd CoolISO
 ```
 
 ### Build

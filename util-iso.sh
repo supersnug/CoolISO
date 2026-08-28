@@ -61,13 +61,13 @@ This ISO is based on ArchLinux ISO modified to provide Installation Environment 
 https://cachyos.org
 
 CachyOS Archiso Sources:
-https://github.com/cachyos/cachyos-live-iso
+https://github.com/supersnug/CoolISO
 
 ArchLinux ISO Source:
 https://gitlab.archlinux.org/archlinux/archiso
 
 Calamares is used as GUI installer:
-https://github.com/calamares/calamares
+https://github.com/supersnug/CoolOS-Installer
 
 Live environment will start now and let you install [38;2;23;147;209mCachyOS[0m to disk.
 
@@ -122,6 +122,25 @@ modify_mkarchiso() {
     else
         msg "mkarchiso is already patched!"
     fi
+}
+
+prepare_coolos_repo() {
+    local _repo_dir="${work_dir}/coolos-repo"
+    local _package="${_repo_dir}/cachyos-calamares-next-x86_64.pkg.tar.zst"
+    local _package_url="${COOLOS_INSTALLER_PACKAGE_URL:-https://github.com/supersnug/CoolOS-Installer/releases/download/development/cachyos-calamares-next-x86_64.pkg.tar.zst}"
+    local _pacman_conf="${work_dir}/archiso/pacman.conf"
+
+    msg "Downloading CoolOS installer package"
+    rm -rf "${_repo_dir}"
+    mkdir -p "${_repo_dir}"
+    curl --fail --location --retry 3 --output "${_package}" "${_package_url}"
+    repo-add "${_repo_dir}/coolos.db.tar.gz" "${_package}"
+
+    {
+        printf '[coolos]\nSigLevel = Optional TrustAll\nServer = file://%s\n\n' "${_repo_dir}"
+        cat "${_pacman_conf}"
+    } > "${_pacman_conf}.tmp"
+    mv "${_pacman_conf}.tmp" "${_pacman_conf}"
 }
 
 prepare_profile(){
@@ -179,6 +198,7 @@ run_build() {
     msg2 "Copying the Archiso folder to build work"
     mkdir -p ${work_dir}
     cp -r archiso ${work_dir}/archiso
+    prepare_coolos_repo
 
     msg "Start [Build ISO]"
 
@@ -235,7 +255,7 @@ gen_iso_fn(){
     vars+=("linux")
     vars+=("$(date +%y%m%d)")
 
-    for n in ${vars[@]}; do
+    for n in "${vars[@]}"; do
         name=${name:-}${name:+-}${n}
     done
 
