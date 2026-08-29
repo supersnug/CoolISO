@@ -39,7 +39,7 @@ jobs:
 
           curl --fail --location \
             --output /tmp/coolos.gpg \
-            https://raw.githubusercontent.com/supersnug/coolos-repo/master/packages/coolos-keyring/coolos.gpg
+            https://raw.githubusercontent.com/supersnug/coolos-repo/main/packages/coolos-keyring/coolos.gpg
           coolos_fingerprint="$(gpg --batch --show-keys --with-colons /tmp/coolos.gpg | awk -F: '$1 == "fpr" { print $10; exit }')"
           test -n "$coolos_fingerprint"
           pacman-key --add /tmp/coolos.gpg
