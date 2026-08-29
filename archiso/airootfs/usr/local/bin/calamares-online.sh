@@ -8,10 +8,11 @@ main() {
     # Installing archlinux-keyring fails due not being correctly signed
     # Mitigate this by installing the latest archlinux-keyring on the ISO, before starting the installation
     # The issue could also happen, when the installation does rank the mirrors and then a "faulty" mirror gets used
-    sudo pacman -Sy --noconfirm archlinux-keyring cachyos-keyring
     # Also populate the keys, before starting the Installer, to avoid above issue
     sudo pacman-key --init
-    sudo pacman-key --populate archlinux cachyos
+    sudo pacman-key --populate archlinux cachyos coolos
+    sudo pacman -Sy --noconfirm archlinux-keyring cachyos-keyring coolos-keyring
+    sudo pacman-key --populate archlinux cachyos coolos
     # Also use timedatectl to sync the time with the hardware clock
     # There has been a bunch of reports, that the keyring was created in the future
     # Syncing appears to fix it

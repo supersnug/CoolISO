@@ -37,6 +37,14 @@ jobs:
           pacman-key --recv-keys F3B607488DB35A47 --keyserver keyserver.ubuntu.com
           pacman-key --lsign-key F3B607488DB35A47
 
+          curl --fail --location \
+            --output /tmp/coolos.gpg \
+            https://raw.githubusercontent.com/supersnug/coolos-repo/main/packages/coolos-keyring/coolos.gpg
+          coolos_fingerprint="$(gpg --batch --show-keys --with-colons /tmp/coolos.gpg | awk -F: '$1 == "fpr" { print $10; exit }')"
+          test -n "$coolos_fingerprint"
+          pacman-key --add /tmp/coolos.gpg
+          pacman-key --lsign-key "$coolos_fingerprint"
+
           sed -i '/^\[core\]$/i[cachyos]\nServer = https://mirror.cachyos.org/repo/$arch/$repo\n' /etc/pacman.conf
 
       - name: Install dependencies
